@@ -1,0 +1,56 @@
+name: Build Docker Images with JIB
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-maven:
+    name: Build with Maven
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+      
+      - name: Build Docker image with Maven JIB
+        run: |
+          mvn clean compile jib:dockerBuild
+      
+      - name: Verify Maven image
+        run: |
+          docker images | grep jib-demo-maven
+          docker run --rm jib-demo-maven:latest
+
+  build-gradle:
+    name: Build with Gradle
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'gradle'
+      
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+      
+      - name: Build Docker image with Gradle JIB
+        run: |
+          ./gradlew clean jibDockerBuild
+      
+      - name: Verify Gradle image
+        run: |
+          docker images | grep jib-demo-gradle
+          docker run --rm jib-demo-gradle:latest
