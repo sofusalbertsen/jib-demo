@@ -30,6 +30,5 @@ jib {
     }
     container {
         mainClass = 'com.example.App'
-        ports = ['8080']
     }
 }

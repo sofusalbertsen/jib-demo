@@ -67,4 +67,3 @@ Both build tools create Docker images with the following configurations:
 - **Maven Image Name**: `jib-demo-maven:latest` (and `jib-demo-maven:1.0.0`)
 - **Gradle Image Name**: `jib-demo-gradle:latest` (and `jib-demo-gradle:1.0.0`)
 - **Main Class**: `com.example.App`
-- **Port**: 8080 (exposed)

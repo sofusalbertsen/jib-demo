@@ -47,9 +47,6 @@
                     </to>
                     <container>
                         <mainClass>com.example.App</mainClass>
-                        <ports>
-                            <port>8080</port>
-                        </ports>
                     </container>
                 </configuration>
             </plugin>
