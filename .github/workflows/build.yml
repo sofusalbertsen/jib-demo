@@ -47,7 +47,7 @@ jobs:
       
       - name: Build Docker image with Gradle JIB
         run: |
-          ./gradlew clean jibBuild
+          ./gradlew clean jib
       
       - name: Verify Gradle image
         run: |
