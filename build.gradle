@@ -20,13 +20,21 @@ repositories {
     mavenCentral()
 }
 
+def imageRegistry = System.getProperty('image.registry', '')
+def imageOwner = System.getProperty('image.owner', '')
+def imageName = "${imageRegistry}${imageOwner}jib-demo-gradle"
+
 jib {
     from {
         image = 'eclipse-temurin:21-jre-jammy'
     }
     to {
-        image = 'jib-demo-gradle'
+        image = imageName
         tags = ['latest', version]
+        auth {
+            username = System.getenv('GITHUB_ACTOR') ?: ''
+            password = System.getenv('GITHUB_TOKEN') ?: ''
+        }
     }
     container {
         mainClass = 'com.example.App'

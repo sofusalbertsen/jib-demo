@@ -6,6 +6,9 @@ jobs:
   build-maven:
     name: Build with Maven
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     
     steps:
       - name: Checkout code
@@ -18,18 +21,27 @@ jobs:
           java-version: '21'
           cache: 'maven'
       
-      - name: Build Docker image with Maven JIB
-        run: |
-          mvn clean compile jib:build
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Verify Maven image
+      - name: Build and push Docker image with Maven JIB
         run: |
-          docker images | grep jib-demo-maven
-          docker run --rm jib-demo-maven:latest
+          mvn clean compile jib:build -Dimage.registry=ghcr.io/ -Dimage.owner=${{ github.repository_owner }}/
+      
+      - name: Verify Maven image push
+        run: |
+          echo "Image pushed to ghcr.io/${{ github.repository_owner }}/jib-demo-maven:latest"
 
   build-gradle:
     name: Build with Gradle
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     
     steps:
       - name: Checkout code
@@ -45,11 +57,17 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
       
-      - name: Build Docker image with Gradle JIB
-        run: |
-          ./gradlew clean jib
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: Verify Gradle image
+      - name: Build and push Docker image with Gradle JIB
         run: |
-          docker images | grep jib-demo-gradle
-          docker run --rm jib-demo-gradle:latest
+          ./gradlew clean jib -Dimage.registry=ghcr.io/ -Dimage.owner=${{ github.repository_owner }}/
+      
+      - name: Verify Gradle image push
+        run: |
+          echo "Image pushed to ghcr.io/${{ github.repository_owner }}/jib-demo-gradle:latest"
