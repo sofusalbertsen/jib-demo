@@ -20,7 +20,7 @@ jobs:
       
       - name: Build Docker image with Maven JIB
         run: |
-          mvn clean compile jib:dockerBuild
+          mvn clean compile jib:build
       
       - name: Verify Maven image
         run: |
@@ -47,7 +47,7 @@ jobs:
       
       - name: Build Docker image with Gradle JIB
         run: |
-          ./gradlew clean jibDockerBuild
+          ./gradlew clean jibBuild
       
       - name: Verify Gradle image
         run: |
