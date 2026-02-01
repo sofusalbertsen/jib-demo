@@ -1,6 +1,6 @@
 name: Build Docker Images with JIB
 
-on: push
+on: [push,workflow_dispatch]
 
 jobs:
   build-maven:
